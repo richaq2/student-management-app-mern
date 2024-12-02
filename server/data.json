@@ -1,0 +1,53 @@
+{
+    "classes": [
+      {
+        "_id": "6482fbd01234567890123456",
+        "name": "Class 1A",
+        "year": 2024,
+        "fees": 2000
+      },
+      {
+        "_id": "6482fbd01234567890123457",
+        "name": "Class 1B",
+        "year": 2024,
+        "fees": 1800
+      }
+    ],
+    "teachers": [
+      {
+        "_id": "6482fbd01234567890123458",
+        "name": "John Doe",
+        "gender": "Male",
+        "DOB": "1980-05-15",
+        "contact": "1234567890",
+        "salary": 50000
+      },
+      {
+        "_id": "6482fbd01234567890123459",
+        "name": "Jane Smith",
+        "gender": "Female",
+        "DOB": "1985-07-20",
+        "contact": "9876543210",
+        "salary": 45000
+      }
+    ],
+    "students": [
+      {
+        "_id": "6482fbd0123456789012345a",
+        "name": "Alice Johnson",
+        "gender": "Female",
+        "DOB": "2010-09-15",
+        "contact": "1111111111",
+        "feesPaid": true
+      },
+      {
+        "_id": "6482fbd0123456789012345b",
+        "name": "Bob Lee",
+        "gender": "Male",
+        "DOB": "2011-06-25",
+        "contact": "2222222222",
+        "feesPaid": false
+      }
+    ]
+  }
+  
