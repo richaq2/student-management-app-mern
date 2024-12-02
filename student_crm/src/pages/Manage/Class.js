@@ -35,7 +35,7 @@ const ClassList = () => {
       {processedClassess.length > 0 ? (
         <Table
           data={processedClassess}
-          columns={['name', 'year', 'teacher', 'student']} // Use 'class' as column since it now contains the name
+          columns={['name', 'year','fees', 'teacher', 'student']} // Use 'class' as column since it now contains the name
         />
       ) : (
         <p>No class available.</p>

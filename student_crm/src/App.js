@@ -14,6 +14,7 @@ import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/Navbar";
 import ClassList from "./pages/Manage/Class";
 import StudentManagement from "./pages/Manage/Student";
+import TeacherManagement from "./pages/Manage/Teacher";
 const App = () => (
   <Router>
     <AuthProvider>
@@ -57,6 +58,16 @@ const App = () => (
             </ProtectedRoute>
           }
         />
+<Route
+          path="/manage/teachers"
+          exact={true}
+          element={
+            <ProtectedRoute requiredRole="admin">
+              < TeacherManagement/>
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </AuthProvider>
   </Router>

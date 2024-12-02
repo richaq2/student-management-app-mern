@@ -110,5 +110,22 @@ router.put('/classes/:id/assign-teacher', async (req, res) => {
     }
   });
 
+
+
+  router.get('/teacher', async (req, res) => {
+    try {
+      const teacher = await Teacher.find()
+  .populate({
+    path: 'assignedClass',
+    populate: { path: 'students' },
+  });
+      if (!teacher) {
+        return res.status(404).json({ message: 'Teacher not found' });
+      }
+      res.json(teacher);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching teachers profile', error: error.message });
+    }
+  });
   
   module.exports = router ;
