@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import Login from "./pages/Login";
@@ -49,7 +44,7 @@ const App = () => (
           }
         />
 
-<Route
+        <Route
           path="/manage/students"
           exact={true}
           element={
@@ -58,16 +53,15 @@ const App = () => (
             </ProtectedRoute>
           }
         />
-<Route
+        <Route
           path="/manage/teachers"
           exact={true}
           element={
             <ProtectedRoute requiredRole="admin">
-              < TeacherManagement/>
+              <TeacherManagement />
             </ProtectedRoute>
           }
         />
-
       </Routes>
     </AuthProvider>
   </Router>
