@@ -2,7 +2,6 @@ import React, { useState ,useEffect} from 'react';
 import { editData,fetchData } from '../services/api';
 
 const EditModal = ({ data, columns, onClose, model,onSave  }) => {
-//   const [formData, setFormData] = useState({ ...data });
   const [formData, setFormData] = useState(() => {
     if (data) {
         return {
@@ -48,13 +47,40 @@ const EditModal = ({ data, columns, onClose, model,onSave  }) => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    // Create a copy of formData to manipulate if necessary
+    let dataToSubmit = { ...formData };
+  
+    // If the 'class' key exists in dataToSubmit
+    if (dataToSubmit.hasOwnProperty('class')) {
+      const selectedClassName = dataToSubmit['class'];
+  
+      // Find the class with the matching name
+      const matchingClass = classes.find((cls) => cls.name === selectedClassName);
+  
+      if (matchingClass) {
+        // Replace the class name with the class _id
+        dataToSubmit['class'] = matchingClass._id;
+      } else {
+        console.error('Class not found for name:', selectedClassName);
+        alert('Invalid class selected.');
+        return; // Exit the function if the class is invalid
+      }
+    }
+  
+    // If the model is 'teacher' and 'class' is a key in the data
+    if (model === 'teacher' && dataToSubmit.hasOwnProperty('class')) {
+      // Replace 'class' key with 'assignedClass'
+      dataToSubmit['assignedClass'] = dataToSubmit['class'];
+      delete dataToSubmit['class'];
+    }
+  
     if (data) {
       // Editing existing data
       const changedFields = {};
-      Object.keys(formData).forEach((key) => {
-        if (formData[key] !== data[key]) {
-          changedFields[key] = formData[key];
+      Object.keys(dataToSubmit).forEach((key) => {
+        if (dataToSubmit[key] !== data[key]) {
+          changedFields[key] = dataToSubmit[key];
         }
       });
       console.log('Changed Fields:', changedFields);
@@ -67,13 +93,15 @@ const EditModal = ({ data, columns, onClose, model,onSave  }) => {
     } else {
       // Adding new data
       if (onSave) {
-        onSave(formData);
+        onSave(dataToSubmit);
       } else {
         console.error('onSave function is not provided for adding new data.');
       }
     }
     onClose();
   };
+  
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded shadow-lg w-1/2">
@@ -93,7 +121,7 @@ const EditModal = ({ data, columns, onClose, model,onSave  }) => {
                 >
                   <option value="">Select Class</option>
                   {classes.map((cls) => (
-                    <option key={cls._id} value={cls._id}>
+                    <option key={cls._id} value={cls.name}>
                       {cls.name}
                     </option>
                   ))}

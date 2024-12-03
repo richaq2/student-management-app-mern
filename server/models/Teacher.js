@@ -6,6 +6,7 @@ const teacherSchema = new mongoose.Schema({
   DOB: { type: Date, required: true },
   contact: { type: String, required: true },
   salary: { type: Number, required: true },
+  salaryDate: { type: Date }, // Add this field
   assignedClass: { type: mongoose.Schema.Types.ObjectId, ref: 'Class', default: null }, // Allow null
 });
 

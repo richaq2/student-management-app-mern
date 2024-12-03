@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Table from '../../components/Table';
-import { fetchData } from '../../services/api';
+import { fetchData,addData } from '../../services/api';
+import EditModal from '../../components/EditModal';
 
 const TeacherManagement = () => {
   const [teachers, setteachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [dataUpdated, setDataUpdated] = useState(false);
+  const [addModalVisible, setAddModalVisible] = useState(false);
 
   useEffect(() => {
     const loadteachers = async () => {
@@ -19,27 +22,55 @@ const TeacherManagement = () => {
       }
     };
     loadteachers();
-  }, []);
+    setDataUpdated(false);
+  }, [dataUpdated]);
+
+  const handleAdd = async (newData) => {
+    try {
+      await addData('teacher', newData);
+      setDataUpdated(true); // Trigger re-fetching of data
+      setAddModalVisible(false);
+    } catch (error) {
+      console.error('Error adding data:', error);
+      alert('Failed to add new student.');
+    }
+  };
 
   if (loading) return <p>Loading teachers...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   const processedTeachers= teachers.map((teacher) => ({
     ...teacher,
-    assignedClass: teacher.assignedClass?.name || '', // Replace 'class' object with its 'name' property
+    class: teacher.assignedClass?.name || '', // Replace 'class' object with its 'name' property
     students:teacher.assignedClass?.students[0]?.name
   }));
 
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">Manage teachers</h2>
+      <button
+        onClick={() => setAddModalVisible(true)}
+        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-4 ml-4"
+      >
+        Add Teacher
+      </button>
       {processedTeachers.length > 0 ? (
         <Table
           data={processedTeachers}
-          columns={['name', 'salary','gender', 'assignedClass','contact','students']} // Use 'class' as column since it now contains the name
+          columns={['name', 'salary','gender', 'DOB','class','contact']} 
+          model='teacher'
+          setDataUpdated = {setDataUpdated}
         />
       ) : (
         <p>No teachers available.</p>
+      )}
+       {addModalVisible && (
+        <EditModal
+        columns={['name', 'salary','gender','DOB', 'class','contact']} 
+          onClose={() => setAddModalVisible(false)}
+          model="teacher"
+          onSave={handleAdd} // Pass the handleAdd function
+        />
       )}
     </div>
   );

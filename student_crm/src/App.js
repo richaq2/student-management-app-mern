@@ -10,13 +10,17 @@ import Navbar from "./components/Navbar";
 import ClassList from "./pages/Manage/Class";
 import StudentManagement from "./pages/Manage/Student";
 import TeacherManagement from "./pages/Manage/Teacher";
+import FinancialAnalytics from './pages/FinancialAnalytics';
+import ClassAnalytics from './pages/ClassAnalytics';
+import './App.css';
+
+
 const App = () => (
   <Router>
     <AuthProvider>
       <Navbar />
       <Routes>
         <Route path="/login" element={<Login />} />
-
         <Route path="/student-profile/:id" element={<StudentProfile />} />
         <Route
           path="/teacher-profile"
@@ -59,6 +63,24 @@ const App = () => (
           element={
             <ProtectedRoute requiredRole="admin">
               <TeacherManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analytics/financial"
+          exact={true}
+          element={
+            <ProtectedRoute requiredRole="admin">
+           <FinancialAnalytics/>
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/classes/:id"
+          exact={true}
+          element={
+            <ProtectedRoute requiredRole="admin">
+           <ClassAnalytics/>
             </ProtectedRoute>
           }
         />

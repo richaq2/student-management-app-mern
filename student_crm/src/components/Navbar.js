@@ -29,6 +29,9 @@ const Navbar = () => {
            <NavLink to="/manage/teachers" className={navLinkStyles}>
              Manage Teacher
            </NavLink>
+           <NavLink to="/analytics/financial" className={navLinkStyles}>
+             Manage Finance
+           </NavLink>
             </>
           )}
           {user?.role === 'teacher' && (

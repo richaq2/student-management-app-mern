@@ -36,10 +36,7 @@ const ClassList = () => {
     }
   };
 
-  const handleDelete = (rowToDelete) => {
-    // setTableData((prevData) => prevData.filter((item) => item.id !== rowToDelete.id));
-  };
-  
+
   if (loading) return <p>Loading class...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
@@ -62,7 +59,6 @@ const ClassList = () => {
           data={processedClassess}
           columns={['name', 'year','fees']} // Use 'class' as column since it now contains the name
           model='classes'
-          onDelete={handleDelete}
           setDataUpdated = {setDataUpdated}
         />
       ) : (

@@ -46,9 +46,6 @@ const StudentManagement = () => {
     class: student.class?.name || '', // Replace 'class' object with its 'name' property
   }));
 
-  const handleDelete = (rowToDelete) => {
-    // setTableData((prevData) => prevData.filter((item) => item.id !== rowToDelete.id));
-  };
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">Manage Students</h2>
@@ -63,7 +60,6 @@ const StudentManagement = () => {
           data={processedStudents}
           columns={['name', 'feesPaid', 'class','gender','DOB','contact']} // Use 'class' as column since it now contains the name
           model='student'
-          onDelete={handleDelete}
           setDataUpdated = {setDataUpdated}
         />
       ) : (

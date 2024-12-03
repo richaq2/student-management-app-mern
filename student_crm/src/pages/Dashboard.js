@@ -1,4 +1,5 @@
 import React from 'react';
+import FinancialAnalytics from './FinancialAnalytics';
 
 const stats = [
   { title: 'Total Classes', count: 10, color: 'bg-green-500' },
@@ -16,6 +17,7 @@ const Dashboard = () => (
       </div>
     ))}
   </div>
+  <FinancialAnalytics/>
     </>
 );
 

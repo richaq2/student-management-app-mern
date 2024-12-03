@@ -4,7 +4,7 @@ const classSchema = new mongoose.Schema({
   name: { type: String, required: true },
   year: { type: Number, required: true },
   fees: { type: Number, required: true },
-  teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher', default: null }, // Optional
+  teacher: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Teacher', default: [] }], // Optional
   students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student', default: [] }], // Optional
 });
 
