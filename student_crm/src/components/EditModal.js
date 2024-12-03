@@ -40,7 +40,8 @@ const EditModal = ({ data, columns, onClose, model,onSave  }) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === 'checkbox' ? checked : 
+      type === 'number' ? Number(value) :value,
     }));
   };
 
@@ -127,7 +128,16 @@ const EditModal = ({ data, columns, onClose, model,onSave  }) => {
                   onChange={handleChange}
                   className="w-full border px-3 py-2 rounded"
                 />
-              )  : (
+              ) : col === 'year' ? (
+                <input
+                  type="number"
+                  name={col}
+                  value={formData[col] || ''}
+                  onChange={handleChange}
+                  className="w-full border px-3 py-2 rounded"
+                />
+              ) 
+               : (
                 <input
                   type="text"
                   name={col}

@@ -23,7 +23,6 @@ const Table = ({ data, columns, model, onDelete, setDataUpdated }) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
     if (isNaN(date)) return "Invalid Date";
-
     const day = date.getDate().toString().padStart(2, "0"); // Pad day with leading zero
     const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-indexed
     const year = date.getFullYear().toString().slice(-2); // Get last two digits of year
