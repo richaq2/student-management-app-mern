@@ -1,11 +1,8 @@
-// student_crm\src\pages\Manage\Student.js
-
-import React, { useState, useEffect } from 'react';
-import Table from '../../components/Table';
-import { fetchData, addData } from '../../api';
-import EditModal from '../../components/EditModal';
-import { toast } from 'react-toastify';
-
+import React, { useState, useEffect } from "react";
+import Table from "../../components/Table";
+import { fetchData, addData } from "../../api";
+import EditModal from "../../components/EditModal";
+import { toast } from "react-toastify";
 
 const StudentManagement = () => {
   const [students, setStudents] = useState([]);
@@ -17,10 +14,10 @@ const StudentManagement = () => {
   useEffect(() => {
     const loadStudents = async () => {
       try {
-        const data = await fetchData('student');
+        const data = await fetchData("student");
         setStudents(data);
       } catch (err) {
-        setError('Failed to load students');
+        setError("Failed to load students");
       } finally {
         setLoading(false);
       }
@@ -31,11 +28,11 @@ const StudentManagement = () => {
 
   const handleAdd = async (newData) => {
     try {
-      await addData('student', newData);
-      setDataUpdated(true); // Trigger re-fetching of data
+      await addData("student", newData);
+      setDataUpdated(true);
       setAddModalVisible(false);
     } catch (error) {
-      console.error('Error adding data:', error);
+      console.error("Error adding data:", error);
       toast.error(error.message);
     }
   };
@@ -45,23 +42,34 @@ const StudentManagement = () => {
 
   const processedStudents = students.map((student) => ({
     ...student,
-    class: student.class?.name || '', // Replace 'class' object with its 'name' property
-    username: student.username || '', // Include username
+    class: student.class?.name || "",
+    username: student.username || "",
   }));
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Manage Students</h2>
+    <div className="space-y-6 mx-5">
+      <h2 className="text-2xl font-bold flex justify-center mt-4">
+        Manage Students
+      </h2>
       <button
         onClick={() => setAddModalVisible(true)}
         className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-4"
       >
-        Add Student
+        <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;Add Student
       </button>
       {processedStudents.length > 0 ? (
         <Table
           data={processedStudents}
-          columns={['username', 'name', 'feesPaid', 'class', 'gender', 'DOB', 'contact', 'feesPaidDate']} // Added 'username' column
+          columns={[
+            "username",
+            "name",
+            "feesPaid",
+            "class",
+            "gender",
+            "DOB",
+            "contact",
+            "feesPaidDate",
+          ]}
           model="student"
           setDataUpdated={setDataUpdated}
         />
@@ -70,10 +78,18 @@ const StudentManagement = () => {
       )}
       {addModalVisible && (
         <EditModal
-          columns={['name', 'feesPaid', 'class', 'gender', 'DOB', 'contact', 'feesPaidDate']}
+          columns={[
+            "name",
+            "feesPaid",
+            "class",
+            "gender",
+            "DOB",
+            "contact",
+            "feesPaidDate",
+          ]}
           onClose={() => setAddModalVisible(false)}
           model="student"
-          onSave={handleAdd} // Pass the handleAdd function
+          onSave={handleAdd}
         />
       )}
     </div>

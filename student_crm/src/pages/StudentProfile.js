@@ -1,10 +1,8 @@
-// src/pages/StudentProfile.js
-
-import React, { useEffect, useState } from 'react';
-import { fetchData, editData } from '../api';
-import { useAuth } from '../contexts/AuthContext';
-import EditModal from '../components/EditModal';
-import { editMe } from '../api';
+import React, { useEffect, useState } from "react";
+import { fetchData, editData } from "../api";
+import { useAuth } from "../contexts/AuthContext";
+import EditModal from "../components/EditModal";
+import { editMe } from "../api";
 
 const StudentProfile = () => {
   const { user } = useAuth();
@@ -17,27 +15,27 @@ const StudentProfile = () => {
   useEffect(() => {
     const getStudentProfile = async () => {
       try {
-        // Fetch student profile using the /me endpoint
-        const data = await fetchData('me');
+        const data = await fetchData("me");
         setStudent(data);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to fetch student profile.');
+        setError(
+          err.response?.data?.message || "Failed to fetch student profile."
+        );
       } finally {
         setLoading(false);
       }
     };
 
-    if (user && user.role === 'student') {
+    if (user && user.role === "student") {
       getStudentProfile();
     } else {
-      setError('Unauthorized access.');
+      setError("Unauthorized access.");
       setLoading(false);
     }
   }, [user, dataUpdated]);
 
   const handleEditSave = async (updatedData) => {
     try {
-      // Only allow updating specific fields
       const fieldsToUpdate = {
         name: updatedData.name,
         gender: updatedData.gender,
@@ -48,7 +46,7 @@ const StudentProfile = () => {
       setDataUpdated((prev) => !prev);
       setEditModalVisible(false);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to update profile.');
+      setError(err.response?.data?.message || "Failed to update profile.");
     }
   };
 
@@ -70,9 +68,10 @@ const StudentProfile = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8 text-center">Student Profile</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">
+        Welcome back, {user?.username}!
+      </h1>
 
-      {/* Personal Information */}
       <div className="bg-white shadow-md rounded-lg mb-8">
         <div className="border-b px-6 py-4">
           <h2 className="text-2xl font-semibold">Personal Information</h2>
@@ -90,7 +89,9 @@ const StudentProfile = () => {
               </tr>
               <tr className="border-t">
                 <td className="px-4 py-2 font-semibold">Date of Birth</td>
-                <td className="px-4 py-2">{new Date(student.DOB).toLocaleDateString()}</td>
+                <td className="px-4 py-2">
+                  {new Date(student.DOB).toLocaleDateString()}
+                </td>
               </tr>
               <tr className="border-t">
                 <td className="px-4 py-2 font-semibold">Contact</td>
@@ -98,12 +99,14 @@ const StudentProfile = () => {
               </tr>
               <tr className="border-t">
                 <td className="px-4 py-2 font-semibold">Fees Paid</td>
-                <td className="px-4 py-2">{student.feesPaid ? 'Yes' : 'No'}</td>
+                <td className="px-4 py-2">{student.feesPaid ? "Yes" : "No"}</td>
               </tr>
               {student.feesPaid && (
                 <tr className="border-t">
                   <td className="px-4 py-2 font-semibold">Fees Paid Date</td>
-                  <td className="px-4 py-2">{new Date(student.feesPaidDate).toLocaleDateString()}</td>
+                  <td className="px-4 py-2">
+                    {new Date(student.feesPaidDate).toLocaleDateString()}
+                  </td>
                 </tr>
               )}
             </tbody>
@@ -111,7 +114,6 @@ const StudentProfile = () => {
         </div>
       </div>
 
-      {/* Edit Profile Button */}
       <div className="flex justify-center mb-8">
         <button
           onClick={() => setEditModalVisible(true)}
@@ -121,7 +123,6 @@ const StudentProfile = () => {
         </button>
       </div>
 
-      {/* Class Details */}
       <div className="bg-white shadow-md rounded-lg">
         <div className="border-b px-6 py-4">
           <h2 className="text-2xl font-semibold">Class Details</h2>
@@ -141,13 +142,20 @@ const StudentProfile = () => {
                   <tr className="border-t">
                     <td className="px-4 py-2">{student.class.name}</td>
                     <td className="px-4 py-2">{student.class.year}</td>
-                    <td className="px-4 py-2">₹{student.class.fees.toLocaleString()}</td>
+                    <td className="px-4 py-2">
+                      ₹{student.class.fees.toLocaleString()}
+                    </td>
                   </tr>
                 </tbody>
               </table>
 
-              {/* Teachers */}
-              <h3 className="text-xl font-semibold mb-4">My Teacher{Array.isArray(student.class.teacher) && student.class.teacher.length > 1 ? 's' : ''}</h3>
+              <h3 className="text-xl font-semibold mb-4">
+                My Teacher
+                {Array.isArray(student.class.teacher) &&
+                student.class.teacher.length > 1
+                  ? "s"
+                  : ""}
+              </h3>
               {student.class.teacher && (
                 <table className="min-w-full table-auto">
                   <thead>
@@ -168,9 +176,15 @@ const StudentProfile = () => {
                       ))
                     ) : (
                       <tr className="border-t">
-                        <td className="px-4 py-2">{student.class.teacher.name}</td>
-                        <td className="px-4 py-2">{student.class.teacher.gender}</td>
-                        <td className="px-4 py-2">{student.class.teacher.contact}</td>
+                        <td className="px-4 py-2">
+                          {student.class.teacher.name}
+                        </td>
+                        <td className="px-4 py-2">
+                          {student.class.teacher.gender}
+                        </td>
+                        <td className="px-4 py-2">
+                          {student.class.teacher.contact}
+                        </td>
                       </tr>
                     )}
                   </tbody>
@@ -183,16 +197,15 @@ const StudentProfile = () => {
         </div>
       </div>
 
-      {/* Edit Modal */}
       {editModalVisible && (
         <EditModal
           data={{
             name: student.name,
             gender: student.gender,
             contact: student.contact,
-            DOB: student.DOB ? student.DOB.substring(0, 10) : '',
+            DOB: student.DOB ? student.DOB.substring(0, 10) : "",
           }}
-          columns={['name', 'gender', 'contact', 'DOB']}
+          columns={["name", "gender", "contact", "DOB"]}
           onClose={() => setEditModalVisible(false)}
           onEdit={handleEditSave}
           model="student"

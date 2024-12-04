@@ -1,10 +1,8 @@
-// src/pages/TeacherProfile.js
-
-import React, { useEffect, useState } from 'react';
-import { fetchData, editData } from '../api';
-import { useAuth } from '../contexts/AuthContext';
-import EditModal from '../components/EditModal';
-import { editMe } from '../api';
+import React, { useEffect, useState } from "react";
+import { fetchData } from "../api";
+import { useAuth } from "../contexts/AuthContext";
+import EditModal from "../components/EditModal";
+import { editMe } from "../api";
 
 const TeacherProfile = () => {
   const { user } = useAuth();
@@ -17,27 +15,27 @@ const TeacherProfile = () => {
   useEffect(() => {
     const getTeacherProfile = async () => {
       try {
-        // Fetch teacher profile using the /me endpoint
-        const data = await fetchData('me');
+        const data = await fetchData("me");
         setTeacher(data);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to fetch teacher profile.');
+        setError(
+          err.response?.data?.message || "Failed to fetch teacher profile."
+        );
       } finally {
         setLoading(false);
       }
     };
 
-    if (user && user.role === 'teacher') {
+    if (user && user.role === "teacher") {
       getTeacherProfile();
     } else {
-      setError('Unauthorized access.');
+      setError("Unauthorized access.");
       setLoading(false);
     }
   }, [user, dataUpdated]);
 
   const handleEditSave = async (updatedData) => {
     try {
-      // Only allow updating specific fields
       const fieldsToUpdate = {
         name: updatedData.name,
         gender: updatedData.gender,
@@ -48,7 +46,7 @@ const TeacherProfile = () => {
       setDataUpdated((prev) => !prev);
       setEditModalVisible(false);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to update profile.');
+      setError(err.response?.data?.message || "Failed to update profile.");
     }
   };
 
@@ -70,7 +68,9 @@ const TeacherProfile = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8 text-center">Teacher Profile</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">
+        Welcome back, {user?.username}!
+      </h1>
 
       {/* Personal Information */}
       <div className="bg-white shadow-md rounded-lg mb-8">
@@ -90,7 +90,9 @@ const TeacherProfile = () => {
               </tr>
               <tr className="border-t">
                 <td className="px-4 py-2 font-semibold">Date of Birth</td>
-                <td className="px-4 py-2">{new Date(teacher.DOB).toLocaleDateString()}</td>
+                <td className="px-4 py-2">
+                  {new Date(teacher.DOB).toLocaleDateString()}
+                </td>
               </tr>
               <tr className="border-t">
                 <td className="px-4 py-2 font-semibold">Contact</td>
@@ -98,18 +100,21 @@ const TeacherProfile = () => {
               </tr>
               <tr className="border-t">
                 <td className="px-4 py-2 font-semibold">Salary</td>
-                <td className="px-4 py-2">₹{teacher.salary.toLocaleString()}</td>
+                <td className="px-4 py-2">
+                  ₹{teacher.salary.toLocaleString()}
+                </td>
               </tr>
               <tr className="border-t">
                 <td className="px-4 py-2 font-semibold">Salary Date</td>
-                <td className="px-4 py-2">{new Date(teacher.salaryDate).toLocaleDateString()}</td>
+                <td className="px-4 py-2">
+                  {new Date(teacher.salaryDate).toLocaleDateString()}
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Edit Profile Button */}
       <div className="flex justify-center mb-8">
         <button
           onClick={() => setEditModalVisible(true)}
@@ -119,7 +124,6 @@ const TeacherProfile = () => {
         </button>
       </div>
 
-      {/* Assigned Class */}
       <div className="bg-white shadow-md rounded-lg">
         <div className="border-b px-6 py-4">
           <h2 className="text-2xl font-semibold">Assigned Class</h2>
@@ -144,7 +148,6 @@ const TeacherProfile = () => {
                 </tbody>
               </table>
 
-              {/* Students */}
               <h3 className="text-xl font-semibold mb-4">Students</h3>
               {teacher.assignedClass.students.length > 0 ? (
                 <table className="min-w-full table-auto">
@@ -166,7 +169,9 @@ const TeacherProfile = () => {
                   </tbody>
                 </table>
               ) : (
-                <p className="text-gray-500">No students assigned to this class.</p>
+                <p className="text-gray-500">
+                  No students assigned to this class.
+                </p>
               )}
             </div>
           ) : (
@@ -175,16 +180,15 @@ const TeacherProfile = () => {
         </div>
       </div>
 
-      {/* Edit Modal */}
       {editModalVisible && (
         <EditModal
           data={{
             name: teacher.name,
             gender: teacher.gender,
             contact: teacher.contact,
-            DOB: teacher.DOB ? teacher.DOB.substring(0, 10) : '',
+            DOB: teacher.DOB ? teacher.DOB.substring(0, 10) : "",
           }}
-          columns={['name', 'gender', 'contact', 'DOB']}
+          columns={["name", "gender", "contact", "DOB"]}
           onClose={() => setEditModalVisible(false)}
           onEdit={handleEditSave}
           model="teacher"

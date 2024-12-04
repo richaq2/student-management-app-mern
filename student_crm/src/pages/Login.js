@@ -1,31 +1,47 @@
-// src/pages/Login.js
-
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { Navigate } from 'react-router-dom';
+
 
 const Login = () => {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [error, setError] = useState(null);
+  if (user) {
+    // User is not authenticated, redirect to login
+    if(user.role === 'student')return <Navigate to="/student-profile" />;
+    if(user.role === 'admin')return <Navigate to="/" />;
+    if(user.role === 'teacher')return <Navigate to="/teacher-profile" />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Reset error state
+    setError(null);
 
     try {
       await login(credentials);
-      // On successful login, the user is redirected inside the AuthContext
+    
     } catch (err) {
       setError(err.message || 'Invalid username or password');
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-4">Login</h2>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
+     
+      <div className="relative z-10 bg-white bg-opacity-90 p-8 rounded-xl shadow-lg w-full max-w-md">
+        <div className="text-center mb-6">
+          <h1 className="text-4xl font-bold text-blue-600">Welcome Back</h1>
+          <p className="text-gray-600">Please sign in to your account</p>
+        </div>
+
+        {error && (
+          <p className="text-red-500 text-sm mb-4 text-center">
+            {error}
+          </p>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium mb-1">Username</label>
             <input
@@ -35,7 +51,7 @@ const Login = () => {
               onChange={(e) =>
                 setCredentials({ ...credentials, username: e.target.value })
               }
-              className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               required
             />
           </div>
@@ -48,17 +64,26 @@ const Login = () => {
               onChange={(e) =>
                 setCredentials({ ...credentials, password: e.target.value })
               }
-              className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               required
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold"
           >
-            Login
+            Sign In
           </button>
         </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-gray-600">
+            Forgot your password?{' '}
+            <a href="#" className="text-blue-600 hover:underline">
+              Reset Password
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,3 @@
-// src/App.js
-
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -12,14 +10,13 @@ import Navbar from "./components/Navbar";
 import ClassList from "./pages/Manage/Class";
 import StudentManagement from "./pages/Manage/Student";
 import TeacherManagement from "./pages/Manage/Teacher";
-import FinancialAnalytics from './pages/FinancialAnalytics';
-import ClassAnalytics from './pages/ClassAnalytics';
-import Unauthorized from './pages/Unauthorized';
-import ErrorBoundary from './components/ErrorBoundary'; // Import ErrorBoundary
-import './App.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import FinancialAnalytics from "./pages/FinancialAnalytics";
+import ClassAnalytics from "./pages/ClassAnalytics";
+import Unauthorized from "./pages/Unauthorized";
+import ErrorBoundary from "./components/ErrorBoundary";
+import "./App.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => (
   <Router>
@@ -32,7 +29,7 @@ const App = () => (
 
           {/* Protected Routes */}
           <Route
-            path="/student-profile/:id"
+            path="/student-profile"
             element={
               <ProtectedRoute requiredRole="student">
                 <StudentProfile />
@@ -100,7 +97,6 @@ const App = () => (
       </ErrorBoundary>
     </AuthProvider>
   </Router>
-  
 );
 
 export default App;

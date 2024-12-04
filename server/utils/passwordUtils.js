@@ -1,10 +1,6 @@
-// utils/passwordUtils.js
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 /**
- * Generates a default password based on the user's name and year of birth.
- * Format: First three letters of name (lowercase) + last two digits of birth year.
- * Example: John Doe, DOB 1990 => joh90
  * @param {String} name - Full name of the user.
  * @param {Date} DOB - Date of birth of the user.
  * @returns {String} - The generated password.
@@ -17,7 +13,6 @@ const generatePassword = (name, DOB) => {
 };
 
 /**
- * Hashes a plain text password.
  * @param {String} password - The plain text password.
  * @returns {String} - The hashed password.
  */
@@ -28,7 +23,6 @@ const hashPassword = async (password) => {
 };
 
 /**
- * Compares a plain text password with a hashed password.
  * @param {String} password - The plain text password.
  * @param {String} hashedPassword - The hashed password.
  * @returns {Boolean} - True if passwords match, else false.
