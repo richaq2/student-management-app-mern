@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Table from '../../components/Table';
 import {fetchData ,addData } from '../../api';
 import EditModal from '../../components/EditModal';
+import {toast} from 'react-toastify'
 
 const ClassList = () => {
   const [classes, setClasses] = useState([]); 
@@ -32,7 +33,7 @@ const ClassList = () => {
       setAddModalVisible(false);
     } catch (error) {
       console.error('Error adding data:', error);
-      alert('Failed to add new Class.');
+      toast.error(error.message);
     }
   };
 
@@ -57,7 +58,7 @@ const ClassList = () => {
       {processedClassess.length > 0 ? (
         <Table
           data={processedClassess}
-          columns={['name', 'year','fees']} // Use 'class' as column since it now contains the name
+          columns={['name', 'year','fees','studentLimit','existingStudents']} // Use 'class' as column since it now contains the name
           model='classes'
           setDataUpdated = {setDataUpdated}
         />
@@ -66,7 +67,7 @@ const ClassList = () => {
       )}
        {addModalVisible && (
         <EditModal
-          columns={['name', 'year','fees']} 
+          columns={['name', 'year','fees','studentLimit']} 
           onClose={() => setAddModalVisible(false)}
           model="classes"
           onSave={handleAdd} // Pass the handleAdd function

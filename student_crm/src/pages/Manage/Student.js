@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Table from '../../components/Table';
 import { fetchData, addData } from '../../api';
 import EditModal from '../../components/EditModal';
+import { toast } from 'react-toastify';
+
 
 const StudentManagement = () => {
   const [students, setStudents] = useState([]);
@@ -34,7 +36,7 @@ const StudentManagement = () => {
       setAddModalVisible(false);
     } catch (error) {
       console.error('Error adding data:', error);
-      alert('Failed to add new student.');
+      toast.error(error.message);
     }
   };
 

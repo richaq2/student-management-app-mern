@@ -17,6 +17,9 @@ import ClassAnalytics from './pages/ClassAnalytics';
 import Unauthorized from './pages/Unauthorized';
 import ErrorBoundary from './components/ErrorBoundary'; // Import ErrorBoundary
 import './App.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const App = () => (
   <Router>
@@ -93,9 +96,11 @@ const App = () => (
             }
           />
         </Routes>
+        <ToastContainer />
       </ErrorBoundary>
     </AuthProvider>
   </Router>
+  
 );
 
 export default App;

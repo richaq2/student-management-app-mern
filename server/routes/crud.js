@@ -370,12 +370,17 @@ router.get('/student/:id', verifyToken, async (req, res) => {
 // POST /api/student - Admin Only
 router.post('/student', verifyToken, verifyAdmin, async (req, res) => {
   try {
-    const { name, gender, DOB, contact, feesPaid, class: classId } = req.body;
+    const { name, gender, DOB, contact, feesPaid, class: classId, feesPaidDate } = req.body;
 
     // Validate class existence
     const classData = await Class.findById(classId);
     if (!classData) {
       return res.status(400).json({ message: 'Invalid class ID provided.' });
+    }
+
+    // Check if class has reached its student limit
+    if (classData.students.length >= classData.studentLimit) {
+      return res.status(400).json({ message: 'Class has reached its student limit.' });
     }
 
     // Create new student instance
@@ -386,6 +391,7 @@ router.post('/student', verifyToken, verifyAdmin, async (req, res) => {
       contact,
       feesPaid,
       class: classId,
+      feesPaidDate,
     });
 
     // Generate unique username
@@ -434,6 +440,19 @@ router.put('/student/:id', verifyToken, verifyAdmin, async (req, res) => {
     if (!student) return res.status(404).json({ message: 'Student not found' });
 
     const oldClassId = student.class ? student.class.toString() : null;
+
+    if(oldClassId !== newClassId){
+      // Validate class existence
+    const classData = await Class.findById(newClassId);
+    if (!classData) {
+      return res.status(400).json({ message: 'Invalid class ID provided.' });
+    }
+
+    // Check if class has reached its student limit
+    if (classData.students.length >= classData.studentLimit) {
+      return res.status(400).json({ message: 'Class has reached its student limit.' });
+    }
+    }
 
     const updatedFields = { ...rest };
 

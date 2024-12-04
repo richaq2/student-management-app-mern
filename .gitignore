@@ -2,3 +2,4 @@ server/node_modules/
 server/.env
 server/seed.js
 server/package-lock.json
+student_crm/package-lock.json
