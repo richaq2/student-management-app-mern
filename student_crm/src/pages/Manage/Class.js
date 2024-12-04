@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../../components/Table';
-import {fetchData ,addData } from '../../services/api';
+import {fetchData ,addData } from '../../api';
 import EditModal from '../../components/EditModal';
 
 const ClassList = () => {

@@ -1,6 +1,8 @@
+// student_crm\src\pages\Manage\Student.js
+
 import React, { useState, useEffect } from 'react';
 import Table from '../../components/Table';
-import {fetchData ,addData } from '../../services/api';
+import { fetchData, addData } from '../../api';
 import EditModal from '../../components/EditModal';
 
 const StudentManagement = () => {
@@ -9,8 +11,6 @@ const StudentManagement = () => {
   const [error, setError] = useState(null);
   const [dataUpdated, setDataUpdated] = useState(false);
   const [addModalVisible, setAddModalVisible] = useState(false);
-
-
 
   useEffect(() => {
     const loadStudents = async () => {
@@ -44,6 +44,7 @@ const StudentManagement = () => {
   const processedStudents = students.map((student) => ({
     ...student,
     class: student.class?.name || '', // Replace 'class' object with its 'name' property
+    username: student.username || '', // Include username
   }));
 
   return (
@@ -58,16 +59,16 @@ const StudentManagement = () => {
       {processedStudents.length > 0 ? (
         <Table
           data={processedStudents}
-          columns={['name', 'feesPaid', 'class','gender','DOB','contact']} // Use 'class' as column since it now contains the name
-          model='student'
-          setDataUpdated = {setDataUpdated}
+          columns={['username', 'name', 'feesPaid', 'class', 'gender', 'DOB', 'contact', 'feesPaidDate']} // Added 'username' column
+          model="student"
+          setDataUpdated={setDataUpdated}
         />
       ) : (
         <p>No students available.</p>
       )}
       {addModalVisible && (
         <EditModal
-          columns={['name', 'feesPaid', 'class', 'gender','DOB','contact']}
+          columns={['name', 'feesPaid', 'class', 'gender', 'DOB', 'contact', 'feesPaidDate']}
           onClose={() => setAddModalVisible(false)}
           model="student"
           onSave={handleAdd} // Pass the handleAdd function

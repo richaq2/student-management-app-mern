@@ -1,56 +1,67 @@
+// src/components/Navbar.js
+
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
 
-  const navLinkStyles = ({ isActive }) =>
-    `text-sm font-medium px-3 py-2 rounded-md ${
-      isActive ? 'bg-blue-800 text-white' : 'text-blue-100 hover:bg-blue-700'
-    }`;
-
   return (
-    <nav className="bg-blue-600 shadow-md">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-white">School CRM</h1>
-        <div className="flex space-x-4">
-          <NavLink to="/" className={navLinkStyles}>
-            Dashboard
-          </NavLink>
-          {user?.role === 'admin' && (
-            <>
-            <NavLink to="/manage/classes" className={navLinkStyles}>
-              Manage Classes
-            </NavLink>
-             <NavLink to="/manage/students" className={navLinkStyles}>
-             Manage Student
-           </NavLink>
-           <NavLink to="/manage/teachers" className={navLinkStyles}>
-             Manage Teacher
-           </NavLink>
-           <NavLink to="/analytics/financial" className={navLinkStyles}>
-             Manage Finance
-           </NavLink>
-            </>
-          )}
-          {user?.role === 'teacher' && (
-            <NavLink to="/teacher-profile" className={navLinkStyles}>
-              My teacher Profile
-            </NavLink>
-          )}
-          {user?.role === 'student' && (
-            <NavLink to="/student-profile" className={navLinkStyles}>
-              My Student Profile
-            </NavLink>
-          )}
-          <button
-            onClick={logout}
-            className="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600"
-          >
-            Logout
-          </button>
-        </div>
+    <nav className="bg-blue-600 p-4 text-white flex justify-between items-center">
+      <div>
+        <Link to="/" className="font-bold text-xl">
+          Student CRM
+        </Link>
+      </div>
+      <div className="flex items-center space-x-4">
+        {user ? (
+          <>
+            {user.role === 'admin' && (
+              <>
+                <Link to="/" className="hover:underline">
+                  Dashboard
+                </Link>
+                <Link to="/manage/classes" className="hover:underline">
+                  Manage Classes
+                </Link>
+                <Link to="/manage/students" className="hover:underline">
+                  Manage Students
+                </Link>
+                <Link to="/manage/teachers" className="hover:underline">
+                  Manage Teachers
+                </Link>
+                <Link to="/analytics/financial" className="hover:underline">
+                  Financial Analytics
+                </Link>
+              </>
+            )}
+            {user.role === 'teacher' && (
+              <>
+                <Link to="/teacher-profile" className="hover:underline">
+                  My Profile
+                </Link>
+                {/* Add more teacher-specific links if needed */}
+              </>
+            )}
+            {user.role === 'student' && (
+              <>
+                <Link to={`/student-profile/${user.username}`} className="hover:underline">
+                  My Profile
+                </Link>
+                {/* Add more student-specific links if needed */}
+              </>
+            )}
+            <span className="font-semibold">{user.username}</span>
+            <button onClick={logout} className="hover:underline">
+              Logout
+            </button>
+          </>
+        ) : (
+          <Link to="/login" className="hover:underline">
+            Login
+          </Link>
+        )}
       </div>
     </nav>
   );

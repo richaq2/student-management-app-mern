@@ -1,3 +1,5 @@
+// src/App.js
+
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -12,79 +14,86 @@ import StudentManagement from "./pages/Manage/Student";
 import TeacherManagement from "./pages/Manage/Teacher";
 import FinancialAnalytics from './pages/FinancialAnalytics';
 import ClassAnalytics from './pages/ClassAnalytics';
+import Unauthorized from './pages/Unauthorized';
+import ErrorBoundary from './components/ErrorBoundary'; // Import ErrorBoundary
 import './App.css';
-
 
 const App = () => (
   <Router>
     <AuthProvider>
-      <Navbar />
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/student-profile/:id" element={<StudentProfile />} />
-        <Route
-          path="/teacher-profile"
-          element={
-            <ProtectedRoute requiredRole="teacher">
-              <TeacherProfile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/manage/classes"
-          exact={true}
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <ClassList />
-            </ProtectedRoute>
-          }
-        />
+      <ErrorBoundary>
+        <Navbar />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
 
-        <Route
-          path="/manage/students"
-          exact={true}
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <StudentManagement />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/manage/teachers"
-          exact={true}
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <TeacherManagement />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/analytics/financial"
-          exact={true}
-          element={
-            <ProtectedRoute requiredRole="admin">
-           <FinancialAnalytics/>
-            </ProtectedRoute>
-          }
-        />
-         <Route
-          path="/classes/:id"
-          exact={true}
-          element={
-            <ProtectedRoute requiredRole="admin">
-           <ClassAnalytics/>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          {/* Protected Routes */}
+          <Route
+            path="/student-profile/:id"
+            element={
+              <ProtectedRoute requiredRole="student">
+                <StudentProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/teacher-profile"
+            element={
+              <ProtectedRoute requiredRole="teacher">
+                <TeacherProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manage/classes"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <ClassList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manage/students"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <StudentManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manage/teachers"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <TeacherManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/analytics/financial"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <FinancialAnalytics />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/classes/:id"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <ClassAnalytics />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </ErrorBoundary>
     </AuthProvider>
   </Router>
 );

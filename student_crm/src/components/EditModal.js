@@ -1,23 +1,33 @@
-import React, { useState ,useEffect} from 'react';
-import { editData,fetchData } from '../services/api';
+// src/components/EditModal.js
 
-const EditModal = ({ data, columns, onClose, model,onSave  }) => {
+import React, { useState, useEffect } from 'react';
+import { editData, fetchData } from '../api';
+
+const EditModal = ({ data, columns, onClose, model, onSave, onEdit }) => {
   const [formData, setFormData] = useState(() => {
+    const initialData = {};
     if (data) {
-        return {
-          ...data,
-          class: data.class || '', // Ensure 'class' is the class ID
-          feesPaid: data.feesPaid || false,
-          gender: data.gender || '',
-        };
-      } else {
-        return {
-          feesPaid: false,
-          gender: '',
-        };
-      }
-    });
+      columns.forEach((col) => {
+        if (col === 'feesPaid') {
+          initialData[col] = data[col] || false;
+        } else {
+          initialData[col] = data[col] || '';
+        }
+      });
+    } else {
+      columns.forEach((col) => {
+        if (col === 'feesPaid') {
+          initialData[col] = false;
+        } else {
+          initialData[col] = '';
+        }
+      });
+    }
+    // console.log(initialData)
+    return initialData;
+  });
   const [classes, setClasses] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -39,25 +49,25 @@ const EditModal = ({ data, columns, onClose, model,onSave  }) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: type === 'checkbox' ? checked : 
-      type === 'number' ? Number(value) :value,
+      [name]:
+        type === 'checkbox' ? checked : type === 'number' ? Number(value) : value,
     }));
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Create a copy of formData to manipulate if necessary
     let dataToSubmit = { ...formData };
-  
-    // If the 'class' key exists in dataToSubmit
-    if (dataToSubmit.hasOwnProperty('class')) {
+
+    // If the 'class' key exists and is part of the columns
+    if (columns.includes('class') && dataToSubmit.hasOwnProperty('class')) {
       const selectedClassName = dataToSubmit['class'];
-  
+
       // Find the class with the matching name
       const matchingClass = classes.find((cls) => cls.name === selectedClassName);
-  
+
       if (matchingClass) {
         // Replace the class name with the class _id
         dataToSubmit['class'] = matchingClass._id;
@@ -67,14 +77,14 @@ const EditModal = ({ data, columns, onClose, model,onSave  }) => {
         return; // Exit the function if the class is invalid
       }
     }
-  
+
     // If the model is 'teacher' and 'class' is a key in the data
-    if (model === 'teacher' && dataToSubmit.hasOwnProperty('class')) {
+    if (model === 'teacher' && columns.includes('class') && dataToSubmit.hasOwnProperty('class')) {
       // Replace 'class' key with 'assignedClass'
       dataToSubmit['assignedClass'] = dataToSubmit['class'];
       delete dataToSubmit['class'];
     }
-  
+
     if (data) {
       // Editing existing data
       const changedFields = {};
@@ -85,7 +95,15 @@ const EditModal = ({ data, columns, onClose, model,onSave  }) => {
       });
       console.log('Changed Fields:', changedFields);
       try {
-        await editData(changedFields, model, data._id);
+        if(onEdit) {
+          await onEdit(changedFields);
+        }
+        else{
+          await editData(model, data._id, changedFields);
+        }
+        if (onSave) {
+          onSave();
+        }
       } catch (error) {
         console.error('Error editing data:', error);
         alert('Failed to edit data.');
@@ -100,12 +118,14 @@ const EditModal = ({ data, columns, onClose, model,onSave  }) => {
     }
     onClose();
   };
-  
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded shadow-lg w-1/2">
-      <h2 className="text-xl font-bold mb-4">{data ? 'Edit Student' : 'Add Student'}</h2>
+        <h2 className="text-xl font-bold mb-4">
+          {data ? 'Edit Profile' : 'Add Profile'}
+        </h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           {columns.map((col) => (
             <div key={col} className="mb-4">
@@ -148,7 +168,7 @@ const EditModal = ({ data, columns, onClose, model,onSave  }) => {
                   />
                   <span>{formData[col] ? 'Yes' : 'No'}</span>
                 </div>
-              ) : col === 'DOB' ? (
+              ) : col === 'DOB' || col === 'salaryDate' || col === 'feesPaidDate' ? (
                 <input
                   type="date"
                   name={col}
@@ -164,10 +184,9 @@ const EditModal = ({ data, columns, onClose, model,onSave  }) => {
                   onChange={handleChange}
                   className="w-full border px-3 py-2 rounded"
                 />
-              ) 
-               : (
+              ) : (
                 <input
-                  type="text"
+                  type={col === 'contact' ? 'tel' : 'text'}
                   name={col}
                   value={formData[col] || ''}
                   onChange={handleChange}

@@ -1,32 +1,31 @@
+// src/contexts/AuthContext.js
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { API_BASE } from '../services/api';
+import { login as apiLogin, logout as apiLogout } from '../api';
 
 // Create Context
 const AuthContext = createContext();
 
 // Auth Provider
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // User object: { id, role, username }
+  const [user, setUser] = useState(null); // User object: { username, role, token }
   const navigate = useNavigate();
 
-  // Save user data to local storage on login
+  // Save user data to state and localStorage on login
   const login = async (credentials) => {
     try {
-      const response = await fetch(`${API_BASE}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials),
-      });
-
-      if (!response.ok) {
-        throw new Error('Invalid credentials');
-      }
-
-      const data = await response.json();
+      const data = await apiLogin(credentials.username, credentials.password);
       setUser(data); // Save user info in state
-      localStorage.setItem('authUser', JSON.stringify(data)); // Save to local storage
-      navigate('/'); // Redirect to dashboard
+      // localStorage is already handled in api.js via setToken
+      // Redirect based on role
+      if (data.role === 'admin') {
+        navigate('/');
+      } else if (data.role === 'teacher') {
+        navigate('/teacher-profile'); // Adjust route as needed
+      } else if (data.role === 'student') {
+        navigate(`/student-profile/${data.username}`); // Assuming username can be used as ID
+      }
     } catch (error) {
       throw error;
     }
@@ -34,9 +33,9 @@ export const AuthProvider = ({ children }) => {
 
   // Clear user data on logout
   const logout = () => {
+    apiLogout();
     setUser(null);
-    localStorage.removeItem('authUser'); // Remove from local storage
-    navigate('/login'); // Redirect to login page
+    navigate('/login');
   };
 
   // Restore user data from local storage on refresh
@@ -48,7 +47,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Check if the user is authorized based on role
-  const isAuthorized = (role) => user?.role === role;
+  const isAuthorized = (requiredRole) => user?.role === requiredRole;
 
   return (
     <AuthContext.Provider value={{ user, login, logout, isAuthorized }}>

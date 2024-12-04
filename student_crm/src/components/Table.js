@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import EditModal from "./EditModal";
 import { useNavigate } from 'react-router-dom';
-import { deleteData } from "../services/api";
+import { deleteData } from "../api";
 
 const Table = ({ data, columns, model, setDataUpdated }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

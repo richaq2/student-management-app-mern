@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Table from '../../components/Table';
-import { fetchData,addData } from '../../services/api';
+import { fetchData,addData } from '../../api';
 import EditModal from '../../components/EditModal';
 
 const TeacherManagement = () => {
@@ -57,7 +57,7 @@ const TeacherManagement = () => {
       {processedTeachers.length > 0 ? (
         <Table
           data={processedTeachers}
-          columns={['name', 'salary','gender', 'DOB','class','contact']} 
+          columns={['username','name', 'salary','gender', 'DOB','class','contact','salaryDate']} 
           model='teacher'
           setDataUpdated = {setDataUpdated}
         />
@@ -66,7 +66,7 @@ const TeacherManagement = () => {
       )}
        {addModalVisible && (
         <EditModal
-        columns={['name', 'salary','gender','DOB', 'class','contact']} 
+        columns={['name', 'salary','gender','DOB', 'class','contact','salaryDate']} 
           onClose={() => setAddModalVisible(false)}
           model="teacher"
           onSave={handleAdd} // Pass the handleAdd function

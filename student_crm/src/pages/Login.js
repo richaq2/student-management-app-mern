@@ -1,18 +1,22 @@
+// src/pages/Login.js
+
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
 const Login = () => {
-  const { login} = useAuth();
+  const { login } = useAuth();
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [error, setError] = useState(null);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null); // Reset error state
+
     try {
       await login(credentials);
+      // On successful login, the user is redirected inside the AuthContext
     } catch (err) {
-      setError('Invalid username or password');
+      setError(err.message || 'Invalid username or password');
     }
   };
 
@@ -28,8 +32,11 @@ const Login = () => {
               type="text"
               name="username"
               value={credentials.username}
-              onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+              onChange={(e) =>
+                setCredentials({ ...credentials, username: e.target.value })
+              }
               className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
           <div>
@@ -38,8 +45,11 @@ const Login = () => {
               type="password"
               name="password"
               value={credentials.password}
-              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+              onChange={(e) =>
+                setCredentials({ ...credentials, password: e.target.value })
+              }
               className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
           <button
