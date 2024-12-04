@@ -1,7 +1,6 @@
 # Student Management App - MERN
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Node.js CI](https://github.com/richaq2/student-management-app-mern/actions/workflows/node.js.yml/badge.svg)](https://github.com/richaq2/student-management-app-mern/actions)
 
 A full-stack student management application built with the MERN stack (MongoDB, Express.js, React.js, Node.js). This application allows administrators, teachers, and students to manage and view educational data efficiently.
 
