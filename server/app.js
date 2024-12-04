@@ -42,10 +42,6 @@ const Student = require("./models/Student");
 const crudRouter = require("./routes/crud");
 app.use("/api", crudRouter);
 
-const uploadRouter = require("./routes/upload");
-app.use("/api/upload", uploadRouter);
-app.use("/uploads", express.static("uploads"));
-
 const authRouter = require("./routes/auth");
 app.use("/api/auth", authRouter);
 
