@@ -1,4 +1,5 @@
-export const API_BASE = 'http://localhost:5000/api';
+require('dotenv').config();
+export const API_BASE = process.env.API_BASE;
 
 const TOKEN_KEY = 'authUser';
 
