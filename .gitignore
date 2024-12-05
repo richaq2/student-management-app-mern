@@ -6,3 +6,6 @@ student_crm/package-lock.json
 student_crm/.env
 server/package-lock.json
 student_crm/package-lock.json
+
+# Local Netlify folder
+.netlify

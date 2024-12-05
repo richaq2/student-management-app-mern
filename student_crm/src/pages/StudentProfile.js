@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchData, editData } from "../api";
+import { fetchData } from "../api";
 import { useAuth } from "../contexts/AuthContext";
 import EditModal from "../components/EditModal";
 import { editMe } from "../api";
