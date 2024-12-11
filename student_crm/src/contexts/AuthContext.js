@@ -3,15 +3,20 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login as apiLogin, logout as apiLogout } from '../api';
-
+import {fetchData} from '../api'
 // Create Context
 const AuthContext = createContext();
 
 // Auth Provider
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // User object: { username, role, token }
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('authUser');
+    if (storedUser) {
+      return JSON.parse(storedUser); // Restore user data
+    }
+    return null; // Default value if no user is stored
+  }); // User object: { username, role, token }
   const navigate = useNavigate();
-
   // Save user data to state and localStorage on login
   const login = async (credentials) => {
     try {
@@ -38,13 +43,31 @@ export const AuthProvider = ({ children }) => {
     navigate('/login');
   };
 
-  // Restore user data from local storage on refresh
   useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const data = await fetchData("me"); // Await the async function
+        console.log("DATA:- ", data);
+      } catch (error) {
+        console.log(error.message)
+        if (error.message === 'Invalid access token') {
+          // Handle 401 error
+          localStorage.removeItem('authUser'); // Clear any stored user data
+          window.location.reload(); // Refresh the page
+        } else {
+          console.error("An error occurred:", error);
+        }
+      }
+    };
+    
     const storedUser = localStorage.getItem('authUser');
     if (storedUser) {
       setUser(JSON.parse(storedUser)); // Restore user data
+      checkAuth();
     }
-  }, []);
+    
+  }, [navigate]); // Add navigate to the dependency array
+
 
   // Check if the user is authorized based on role
   const isAuthorized = (requiredRole) => user?.role === requiredRole;

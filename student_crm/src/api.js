@@ -1,4 +1,4 @@
-export const API_BASE = 'http://localhost:5000/api';
+export const API_BASE = 'https://student-management-app-mern-tmvx.onrender.com/api';
 
 const TOKEN_KEY = 'authUser';
 
@@ -44,8 +44,6 @@ const authFetch = async (endpoint, options = {}) => {
 
   try {
     const response = await fetch(`${API_BASE}/${endpoint}`, config);
-
-
     if (response.status === 401) {
       removeToken();
       throw new Error('Unauthorized. Please log in again.');
@@ -64,7 +62,6 @@ const authFetch = async (endpoint, options = {}) => {
 
     return response.json();
   } catch (error) {
-    console.error(`Error fetching ${endpoint}:`, error);
     throw error;
   }
 };
@@ -96,7 +93,7 @@ export const login = async (username, password) => {
 
     return data;
   } catch (error) {
-    console.error('Login error:', error);
+
     throw error;
   }
 };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Table from "../../components/Table";
 import { fetchData, addData } from "../../api";
 import EditModal from "../../components/EditModal";
+import Skeleton from "react-loading-skeleton";
 import { toast } from "react-toastify";
 
 const StudentManagement = () => {
@@ -37,9 +38,6 @@ const StudentManagement = () => {
     }
   };
 
-  if (loading) return <p>Loading students...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
-
   const processedStudents = students.map((student) => ({
     ...student,
     class: student.class?.name || "",
@@ -55,9 +53,30 @@ const StudentManagement = () => {
         onClick={() => setAddModalVisible(true)}
         className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-4"
       >
-        <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;Add Student
+        <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add Student
       </button>
-      {processedStudents.length > 0 ? (
+
+      {loading ? (
+        <div className="space-y-4">
+          {Array.from({ length: 8 }).map((_, idx) => (
+            <div
+              key={idx}
+              className="flex justify-between items-center p-4 bg-white shadow rounded"
+            >
+              <Skeleton height={20} width={120} />
+              <Skeleton height={20} width={100} />
+              <Skeleton height={20} width={150} />
+              <Skeleton height={20} width={120} />
+              <Skeleton height={20} width={100} />
+              <Skeleton height={20} width={120} />
+              <Skeleton height={20} width={100} />
+              
+            </div>
+          ))}
+        </div>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : processedStudents.length > 0 ? (
         <Table
           data={processedStudents}
           columns={[
@@ -76,6 +95,7 @@ const StudentManagement = () => {
       ) : (
         <p>No students available.</p>
       )}
+
       {addModalVisible && (
         <EditModal
           columns={[

@@ -2,27 +2,28 @@ import React, { useState, useEffect } from "react";
 import Table from "../../components/Table";
 import { fetchData, addData } from "../../api";
 import EditModal from "../../components/EditModal";
+import Skeleton from "react-loading-skeleton";
 import { toast } from "react-toastify";
 
 const TeacherManagement = () => {
-  const [teachers, setteachers] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dataUpdated, setDataUpdated] = useState(false);
   const [addModalVisible, setAddModalVisible] = useState(false);
 
   useEffect(() => {
-    const loadteachers = async () => {
+    const loadTeachers = async () => {
       try {
         const data = await fetchData("teacher");
-        setteachers(data);
+        setTeachers(data);
       } catch (err) {
         setError("Failed to load teachers");
       } finally {
         setLoading(false);
       }
     };
-    loadteachers();
+    loadTeachers();
     setDataUpdated(false);
   }, [dataUpdated]);
 
@@ -37,9 +38,6 @@ const TeacherManagement = () => {
     }
   };
 
-  if (loading) return <p>Loading teachers...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
-
   const processedTeachers = teachers.map((teacher) => ({
     ...teacher,
     class: teacher.assignedClass?.name || "",
@@ -47,17 +45,36 @@ const TeacherManagement = () => {
   }));
 
   return (
-    <div className="space-y-6  mx-5">
+    <div className="space-y-6 mx-5">
       <h2 className="text-2xl font-bold flex justify-center mt-4">
-        Manage teachers
+        Manage Teachers
       </h2>
       <button
         onClick={() => setAddModalVisible(true)}
         className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-4 ml-4"
       >
-        <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;Add Teacher
+        <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add Teacher
       </button>
-      {processedTeachers.length > 0 ? (
+
+
+      {loading ? (
+        <div className="space-y-4">
+          {Array.from({ length: 8 }).map((_, idx) => (
+            <div
+              key={idx}
+              className="flex justify-between items-center p-4 bg-white shadow rounded"
+            >
+              <Skeleton height={20} width={100} />
+              <Skeleton height={20} width={120} />
+              <Skeleton height={20} width={150} />
+              <Skeleton height={20} width={100} />
+              <Skeleton height={20} width={120} />
+            </div>
+          ))}
+        </div>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : processedTeachers.length > 0 ? (
         <Table
           data={processedTeachers}
           columns={[
@@ -76,6 +93,7 @@ const TeacherManagement = () => {
       ) : (
         <p>No teachers available.</p>
       )}
+
       {addModalVisible && (
         <EditModal
           columns={[

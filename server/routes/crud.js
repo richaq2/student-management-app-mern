@@ -67,6 +67,9 @@ router.get("/me", verifyToken, async (req, res) => {
         return res.status(404).json({ message: "Student not found" });
       return res.json(student);
     }
+    if (role === 'admin'){
+      return res.status(200).json({});
+    }
 
     return res.status(400).json({ message: "Invalid user role" });
   } catch (error) {

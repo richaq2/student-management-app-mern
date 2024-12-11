@@ -53,8 +53,9 @@ const StudentProfile = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p className="text-gray-500 text-lg">Loading student profile...</p>
-      </div>
+      <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+      <p className="ml-4 text-gray-700">Loading Student Profile...</p>
+    </div>
     );
   }
 

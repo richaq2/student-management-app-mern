@@ -16,9 +16,12 @@ import Unauthorized from "./pages/Unauthorized";
 import ErrorBoundary from "./components/ErrorBoundary";
 import "./App.css";
 import { ToastContainer } from "react-toastify";
+import { SkeletonTheme } from 'react-loading-skeleton';
 import "react-toastify/dist/ReactToastify.css";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const App = () => (
+  <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
   <Router>
     <AuthProvider>
       <ErrorBoundary>
@@ -97,6 +100,7 @@ const App = () => (
       </ErrorBoundary>
     </AuthProvider>
   </Router>
+  </SkeletonTheme>
 );
 
 export default App;
