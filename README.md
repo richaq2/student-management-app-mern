@@ -55,3 +55,6 @@ Make sure you have the following installed on your system:
 - **Node.js** (v12 or later)
 - **MongoDB** (local installation or MongoDB Atlas account)
 - **Git**
+
+- backend - https://student-management-app-mern-tmvx.onrender.com
+- frontend- https://student-crm-frontend.netlify.app/
