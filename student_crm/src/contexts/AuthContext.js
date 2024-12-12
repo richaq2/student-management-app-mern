@@ -46,8 +46,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+         // eslint-disable-next-line
         const data = await fetchData("me"); // Await the async function
-        console.log("DATA:- ", data);
       } catch (error) {
         console.log(error.message)
         if (error.message === 'Invalid access token') {

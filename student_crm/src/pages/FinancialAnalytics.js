@@ -231,7 +231,7 @@ const FinancialAnalytics = () => {
             </div>
             <div className="flex items-center">
               <div className="bg-green-500 text-white p-4 rounded-full">
-              <i class="fa fa-handshake-o text-2xl"></i>
+              <i className="fa fa-handshake-o text-2xl"></i>
               </div>
               <div className="ml-4">
                 <p className="text-gray-600">Income</p>

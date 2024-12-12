@@ -7,34 +7,24 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const renderLinks = () => {
-    if (!user) {
-      return (
-        <Link
-          to="/login"
-          className="block mt-4 lg:inline-block lg:mt-0 text-gray-200 hover:text-white mr-4"
-        >
-          Login
-        </Link>
-      );
-    }
-
     let links = [];
-
-    if (user.role === "admin") {
-      links = [
-        { to: "/", label: "Dashboard" },
-        { to: "/manage/classes", label: "Manage Classes" },
-        { to: "/manage/students", label: "Manage Students" },
-        { to: "/manage/teachers", label: "Manage Teachers" },
-        { to: "/analytics/financial", label: "Financial Analytics" },
-      ];
-    } else if (user.role === "teacher") {
-      links = [{ to: "/teacher-profile", label: "My Profile" }];
-    } else if (user.role === "student") {
-      links = [{ to: `/student-profile`, label: "My Profile" }];
+    if(user){
+      if (user.role === "admin") {
+        links = [
+          { to: "/", label: "Dashboard" },
+          { to: "/manage/classes", label: "Manage Classes" },
+          { to: "/manage/students", label: "Manage Students" },
+          { to: "/manage/teachers", label: "Manage Teachers" },
+          { to: "/analytics/financial", label: "Financial Analytics" },
+        ];
+      } else if (user.role === "teacher") {
+        links = [{ to: "/teacher-profile", label: "My Profile" }];
+      } else if (user.role === "student") {
+        links = [{ to: `/student-profile`, label: "My Profile" }];
+      }
     }
-
-    return (
+      
+      return (
       <div className="flex flex-col lg:flex-row">
         {links.map((link) => (
           <Link
@@ -50,11 +40,13 @@ const Navbar = () => {
   };
 
   return (
+    <>
+    {user && (
     <nav className="bg-slate-900">
       <div className="container mx-auto flex items-center justify-between flex-wrap p-4">
         <div className="flex items-center flex-shrink-0 text-white mr-6">
           <Link to="/" className="font-bold text-xl tracking-tight">
-            Student CRM
+          SmartEd
           </Link>
         </div>
         <div className="block lg:hidden">
@@ -90,6 +82,8 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
+  )}
+  </>
   );
 };
 

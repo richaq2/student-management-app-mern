@@ -246,7 +246,7 @@ const Table = ({ data, columns, model, setDataUpdated }) => {
               disabled={currentPage === 1}
               className="px-3 py-1 border hover:bg-gray-100 disabled:opacity-50"
             >
-              <i class="fa fa-arrow-left" aria-hidden="true"></i>
+              <i className="fa fa-arrow-left" aria-hidden="true"></i>
             </button>
             <span className="px-3 py-1 border-t border-b bg-white">
               Page {currentPage} of {totalPages}
@@ -256,7 +256,7 @@ const Table = ({ data, columns, model, setDataUpdated }) => {
               disabled={currentPage === totalPages}
               className="px-3 py-1 border hover:bg-gray-100 disabled:opacity-50"
             >
-              <i class="fa fa-arrow-right" aria-hidden="true"></i>
+              <i className="fa fa-arrow-right" aria-hidden="true"></i>
             </button>
             <button
               onClick={() => handlePageChange(totalPages)}
