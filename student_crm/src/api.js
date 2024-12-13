@@ -1,4 +1,4 @@
-export const API_BASE = 'https://student-management-app-mern-tmvx.onrender.com/';
+export const API_BASE = 'https://student-management-app-mern-tmvx.onrender.com/api';
 
 const TOKEN_KEY = 'authUser';
 
